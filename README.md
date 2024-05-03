@@ -95,29 +95,29 @@ Purpose | Port | In or Out | Desc.
 --- | --- | --- | --- 
 SIP Trunk / VOIP Provider|5090 udp|Inbound|SIP communications
 --- | --- | --- | ---
-- |any udp|Inbound|RTP
+--- |any udp|Inbound|RTP
 --- | --- | --- | --- 
 remote 3CX apps|5090 udp/tcp|Inbound|the 3CX tunnel
 --- | --- | --- | --- 
-- |443 or 5001 tcp|Inbound|Presence and Provisioning
+--- |443 or 5001 tcp|Inbound|Presence and Provisioning
 --- | --- | --- | --- 
-- |443 tcp|Outbound|Google Android PUSH
+--- |443 tcp|Outbound|Google Android PUSH
 --- | --- | --- | --- 
-- |2195, 2196 tcp|Outbound|Apple iOS PUSH
+--- |2195, 2196 tcp|Outbound|Apple iOS PUSH
 --- | --- | --- | --- 
 Remote IP Phones / Bridges via Direct SIP|5060 udp/tcp|Inbound| -
 --- | --- | --- | --- 
-- |5061 tcp|Inbound|(If using secure SIP)
+--- |5061 tcp|Inbound|(If using secure SIP)
 --- | --- | --- | --- 
-- |any udp|Inbound|RTP
+--- |any udp|Inbound|RTP
 --- | --- | --- | --- 
-- |443 or 5001 tcp|Inbound|provisioning
+--- |443 or 5001 tcp|Inbound|provisioning
 --- | --- | --- | --- 
 3CX WebMeeting, SMTP ans Activations|443 tcp|Outbound|webmeeting.3cx.net
 --- | --- | --- | --- 
-- |443 or 5001 tcp|Inbound|to notify users of incoming web meetings
+--- |443 or 5001 tcp|Inbound|to notify users of incoming web meetings
 --- | --- | --- | --- 
-- |2528 tcp|Outbound|tosend emails using 3CX SMTP
+--- |2528 tcp|Outbound|tosend emails using 3CX SMTP
 --- | --- | --- | --- 
 Remote Configuration Wizard|5014 tcp|Inbound|HTTP
 
