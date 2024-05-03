@@ -1,109 +1,112 @@
+# 3CX Basic Certification
 ---------------------------------------------
 
-Configuring a Desktop Phone:
+## Configuring a Desktop Phone:
 
-3CX supported IP phones
-	Fanvil
-	Grandstream
-	Htek
-	snom
-	Yealink
+### 3CX supported IP phones:
+- Fanvil
+- Grandstream
+- Htek
+- snom
+- Yealink
 
-Find full requirements here:
-https://www.3cx.com/support/phone-firmwares/
+Find full supported IP phone list is [here](https://www.3cx.com/sip-phones/)
 
-Provisioning Types:
+### Provisioning Types:
+RPS
+- The phone is pre-programmed from the factory to connect to the vendor's RPS server and request the provisioning URL. 3CX sends the vendor's RPS server the URL and when a new phone boots up it will obtain the URL from the RPS server.
+
+DHCP option 66
+- For larger networks with manageable DHCP servers, you can enter the base URL in DHCP Option 66. A phone will query this field when it obtains its IP and if a URL is specified it will go there by adding its MAC address.
+
 PnP (Plug and Play)
-	Can be used for 3CX in the cloud - phones behind an SBC
-			3CX on-premise - Phones on local LAN
-	Fast and simple
-	Admin driven
-	Based on multicast messages
-		Plug the phone in, it announces that it was been plugged in, PBX receives the announcement, admin approves and assigns desktop phone
-	The multicast ends at the router/border devices
+- Can be used for 3CX in the cloud (phones behind an SBC)
+	1. 3CX on-premise - Phones on local LAN
+- Fast and simple
+- Admin driven
+- Based on multicast messages
+	1. When the phone plugged in, it announces that it was been plugged in, PBX receives the announcement, admin approves and assigns desktop phone.
+	2. The multicast ends at the router/border devices
+
+More info is [here](https://www.3cx.com/docs/manual/ip-phones/)
 
 BLF (Busy Lamp Field)
-	IP Phones
-	monitors and extensions call state
-		Idle
-		Ringing
-		In Call
-	Used for
-		Pickups
-		Transfers
-		Speed Dial
-	More Options
-		Lines Keys
-		Profile state cnahe
-		queue state change
-		Speed dials
-		Custom speed dials
-		Shared parking
+- IP Phones
+- monitors and extensions call state
+	1. Idle
+	2. Ringing
+	3. In Call
+- Used for
+	1. Pickups
+	2. Transfers
+	3. Speed Dial
+- More Options
+	1. Lines Keys
+	2. Profile state cnahe
+	3. queue state change
+	4. Speed dials
+	5. Custom speed dials
+	6. Shared parking
 
 RPS (Direct SIP/Stun)
-phones that are not behind a 3CX SBC must be configured with a 3CX RPS server
-In the 3CX management console, when you're adding a new phone, need to select "Direct SIP (STUN - remote)" in the options, and the provisioning link
+- Phones that are not behind a 3CX SBC, must be configured with a 3CX RPS server.
+- In the 3CX management console, when you're adding a new phone, need to select **Direct SIP (STUN - remote)** in the options, and the provisioning link
 
 Legacy phones: Cisco, Polycom, and Aastra
-Need to wipe the phone's old firmware and install new 3CX firmware on it
-In the management console, add a new phone, select the phone model and provisioning type
-Legacy phones are harder than other phones
+- Need to wipe the phone's old firmware and install new 3CX firmware on it
+- In the management console, add a new phone, select the phone model and provisioning type
+- ***Not supported anymore, not recommended***
 
-
-Troubleshooting 
-Use this link: https://www.3cx.com/docs/plug-and-play-ip-phone/
 
 3CX Web Client
-Can control IP phone with mouse
-	Dial 
-	Pickup
-	Transfer
-	Conferencing
-	Recording Start/Stop
+- Browser-based, no software installation required
+	1. Prerequisites(browser): Chrome, Firefox, Edge
+	2. Prerequisites(platform); Windows, Mac
+- Can run alongside IP phones on the same extention number by **SIP Forking**
+- Can control IP phone with mouse
+	1. Dial 
+	2. Pickup
+	3. Transfer
+	4. Conferencing
+	5. Recording Start/Stop
+- Can send Welcome email manually by admin or automatically when the extention is made
+	1. 3cxconfig file or QR code
+	2. need to make sure the user install it
 
-There are also web browser extensions available
+3CX APP client
+- Windows 10 or higher
+- Mac 10.10 or higher, 10.13 is prefered (as of the time of lockdown)
+- iOS 13.0 or higher
+- Android 7.X or higher
 
 ---------------------------------------------------
 
-Configuring the Firewall:
-
-Need to setup the firewall because the voice call needs to pass through it to reach your PBX
-Voice calls use several ports because they use SIP and RTP
-
-Some configurable firewalls
-	pfsense
-	Watchgurad
-	Sonicwall
-
-3CX WILL NOT CONFIGURE YOUR FIREWALL
+## Configuring the Firewall:
+- Need to setup the firewall because the voice call needs to pass through it to reach your PBX.
+- Voice calls use several ports because they use SIP and RTP.
+- Some configurable firewalls
+	1. pfsense
+	2. Watchgurad
+	3. Sonicwall
+- **3CX WILL NOT CONFIGURE YOUR FIREWALL**
 
 Firewall ports to be opened
-	Ports for SIP Trunk / VOIP Provider
-		Port 5060 (Inbound, UDP) for SIP communications
-		Port(Inbound, UDP) for RTP
+|SIP Trunk / VOIP Provider|5090 udp|Inbound|SIP communications|
+||any udp|Inbound|RTP|
+|remote 3CX apps|5090 udp/tcp|Inbound|the 3CX tunnel|
+||443 or 5001 tcp|Inbound|Presence and Provisioning|
+||443 tcp|Outbound|Google Android PUSH|
+||2195, 2196 tcp|Outbound|Apple iOS PUSH|
+|Remote IP Phones / Bridges via Direct SIP|5060 udp/tcp|Inbound||
+||5061 tcp|Inbound|(If using secure SIP)|
+||any udp|Inbound|RTP|
+||443 or 5001 tcp|Inbound|provisioning|
+|3CX WebMeeting, SMTP ans Activations|443 tcp|Outbound|webmeeting.3cx.net|
+||443 or 5001 tcp|Inbound|to notify users of incoming web meetings|
+||2528 tcp|Outbound|tosend emails using 3CX SMTP|
+|Remote Configuration Wizard|5014 tcp|Inbound|HTTP|
 
-	Ports for remote 3CX apps
-		Port 5090 (inbound, UDP and TCP) for the 3CX tunnel
-		Port 443 or 5001 (Inbound, TCP) HTTPS for Presence and Provisioning
-		Port 443 (Outbound, TCP) for Google Android PUSH
-		Port 2195, 2196 (outbound, TCP) for Apple iOS PUSH
-
-	Ports for Remote IP Phones / Bridges via Direct SIP
-		Port 5060 (Inbound, UDP and TCP)
-		Port 5061 (Inbound, TCP) (If using secure SIP)
-		Port(Inbound, UDP) for RTP
-		Port 443 for 5001 (Inbound, TCP) HTTPs for provisioning
-
-	Ports for 3CX WebMeeting, SMTP ans Activations
-		Port 443 (Outbound, TCP) to webmeeting.3cx.net
-		Port 443 or 5001 (Inbound, TCP) to notify users of incoming web meetings
-		The open port you have selected for HTTPS (Inbound, TCP) default is 443 or 5001
-		Port 2528 (Outbound, TCP) to be able to send emails using 3CX SMTP
-
-	Ports for Remote Configuration Wizard
-		Port 5014 (Inbound, TCP) HTTP
-
-Also, you need to disable SIP ALG (Application Layer Gateway)
+Also, you need to **disable SIP ALG** (Application Layer Gateway)
 
 Full ports used my 3CX:
 	https://www.3cx.com/docs/ports/
