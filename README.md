@@ -91,8 +91,10 @@ Legacy phones: Cisco, Polycom, and Aastra
 - **3CX WILL NOT CONFIGURE YOUR FIREWALL**
 
 Firewall ports to be opened
-SIP Trunk / VOIP Provider|5090 udp|Inbound|SIP communications
+Purpose | Port | In or Out | Desc.
 --- | --- | --- | --- 
+SIP Trunk / VOIP Provider|5090 udp|Inbound|SIP communications
+
 |any udp|Inbound|RTP
 --- | --- | --- | --- 
 remote 3CX apps|5090 udp/tcp|Inbound|the 3CX tunnel
